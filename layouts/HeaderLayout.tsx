@@ -1,23 +1,29 @@
 import styled from '@emotion/styled';
+import { getNormalizeTime } from '../utils/getNormalizeTime';
 
 type HeaderLayoutType = {
   setPause?: () => void;
-  setStart?: () => void;
-  setRestart?: () => void;
+  clickStart?: () => void;
+  clickRestart?: () => void;
   score: number;
-  timer: string;
+  timer: number;
 };
 
 export const HeaderLayout: React.FC<HeaderLayoutType> = ({
   setPause,
+  clickStart,
+  clickRestart,
   score,
+  timer,
 }) => {
   return (
     <>
       <HeaderContainer>
         <ControlPanel>
           <PanelElement>
-            <ControlPanelButton>Start</ControlPanelButton>
+            <ControlPanelButton onClick={() => clickStart()}>
+              Start
+            </ControlPanelButton>
           </PanelElement>
           <PanelElement>
             <ControlPanelButton onClick={() => setPause()}>
@@ -25,12 +31,14 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = ({
             </ControlPanelButton>
           </PanelElement>
           <PanelElement>
-            <ControlPanelButton>Restart</ControlPanelButton>
+            <ControlPanelButton onClick={() => clickRestart()}>
+              Restart
+            </ControlPanelButton>
           </PanelElement>
         </ControlPanel>
         <ScorePanel>
           <PanelElement>{score} points</PanelElement>
-          <PanelElement>SS seconds</PanelElement>
+          <PanelElement>{getNormalizeTime(timer)}</PanelElement>
         </ScorePanel>
       </HeaderContainer>
     </>

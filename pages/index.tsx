@@ -16,27 +16,38 @@ import {
 export default function Index() {
   const [starsStorage, setStarStorage] = useState<
     { x: number; y: number; value: number }[]
-  >([
-    { x: 0, y: 50, value: 4 },
-    { x: 100, y: 200, value: -5 },
-    { x: 200, y: 400, value: 2 },
-  ]);
+  >([]);
   const [starsCounter, setStarsCounter] = useState<number>(starsStorage.length);
   const [pause, setPause] = useState<boolean>(true);
   const [intervalState, setIntervalState] = useState<any>();
   const [timerInterval, setTimerInterval] = useState<any>();
   const [score, setScore] = useState<number>(0);
-  const [timer, setTimer] = useState<any>(0);
+  const [timer, setTimer] = useState<number>(0);
 
-  const clickStart = (pauseStatus) => {
-    if (pauseStatus) {
-      let startTime = Date.now();
+  const clickRestart = () => {
+    setPause(true);
+    setScore(0);
+    setTimer(0);
+    setStarStorage([]);
+    clearInterval(intervalState);
+    clearInterval(timerInterval);
+  };
+
+  const clickStart = () => {
+    let startTime = Date.now();
+    if (starsStorage.length === 0) {
       setTimerInterval(
         setInterval(() => {
           setTimer(Date.now() - startTime);
         }, 1000),
       );
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+          createStar(setStarStorage);
+        }, i * 3000);
+      }
     }
+    clickPause();
   };
 
   const clickPause = () => {
@@ -63,6 +74,7 @@ export default function Index() {
         }, 20),
       );
     } else {
+      clearInterval(timerInterval);
       clearInterval(intervalState);
       setPause(true);
     }
@@ -77,7 +89,13 @@ export default function Index() {
           layout="fill"
         />
       </ImageContainer>
-      <HeaderLayout setPause={clickPause} score={score} timer={timer} />
+      <HeaderLayout
+        setPause={clickPause}
+        score={score}
+        timer={timer}
+        clickStart={clickStart}
+        clickRestart={clickRestart}
+      />
       <FallingStarsZone>
         {starsStorage.map((el, idx) => {
           return (
