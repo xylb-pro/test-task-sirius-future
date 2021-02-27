@@ -84,7 +84,7 @@ class MyDocument extends Document {
               display: block;
             }
             body {
-              background: whitesmoke;
+              overflow: hidden;
             }
             ol,
             ul {
