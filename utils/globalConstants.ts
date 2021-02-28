@@ -4,7 +4,11 @@ export const MAX_Y_POSITION: number = 850;
 /**
  * Star step in pixels
  */
-export const STAR_STEP: number = 2;
+export const STAR_STEP: number = 5;
+/**
+ * Star step in miliseconds
+ */
+export const STAR_STEP_MS: number = 20;
 /**
  * Вelay between spawning stars at start
  */
@@ -14,7 +18,7 @@ export const BASE_SPAWN_DELAY: number = 3000;
  */
 export const SPAWN_AREA: { [key: string]: number } = {
   min: -100,
-  max: -400,
+  max: -1000,
 };
 /**
  * Possible star values
