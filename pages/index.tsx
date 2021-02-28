@@ -5,11 +5,13 @@ import { FallingStarsZone } from '../layouts/FallingStarsZone';
 import { HeaderLayout } from '../layouts/HeaderLayout';
 import { StarContainer } from '../layouts/StarContainer';
 import { createStar } from '../utils/createStar';
+import { getNormalizeTime } from '../utils/getNormalizeTime';
 import {
   BASE_SPAWN_DELAY,
   MAX_STAR_COUNT,
   MAX_Y_POSITION,
   STAR_STEP,
+  STAR_STEP_MS,
 } from '../utils/globalConstants';
 
 export default function Index() {
@@ -21,24 +23,31 @@ export default function Index() {
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout>();
   const [score, setScore] = useState<number>(0);
   const [timer, setTimer] = useState<number>(0);
+  const [timerStartValue, setTimerStartValue] = useState<number>(0);
+  const [starCount, setStarCount] = useState<number>(0);
+  const [isNewGame, setIsNewGame] = useState<boolean>(true);
 
   const clickRestart = (): void => {
     setPause(true);
     setScore(0);
     setTimer(0);
     setStarStorage([]);
+    setTimerStartValue(0);
     clearInterval(intervalState);
     clearInterval(timerInterval);
+    setIsNewGame(true);
+    setStarCount(0);
   };
 
   const clickStart: () => void = () => {
     let startTime: number = Date.now();
+    setTimerInterval(
+      setInterval(() => {
+        setTimer(timerStartValue + Date.now() - startTime);
+      }, 1000),
+    );
     if (starsStorage.length === 0) {
-      setTimerInterval(
-        setInterval(() => {
-          setTimer(Date.now() - startTime);
-        }, 1000),
-      );
+      setIsNewGame(false);
       for (let i = 0; i < MAX_STAR_COUNT; i++) {
         setTimeout(() => {
           createStar(setStarStorage);
@@ -55,10 +64,12 @@ export default function Index() {
         setInterval(() => {
           setStarStorage((prev) => {
             return prev
-              .filter((el) => {
+              .filter((el, idx, arr) => {
                 if (el.y >= MAX_Y_POSITION) {
                   setScore((p) => p + el.value);
                   createStar(setStarStorage);
+                  setStarCount((p) => (p += 1));
+                  console.log(arr.length);
                 }
                 return el.y < MAX_Y_POSITION;
               })
@@ -66,11 +77,12 @@ export default function Index() {
                 return { ...el, y: el.y + STAR_STEP };
               });
           });
-        }, 20),
+        }, STAR_STEP_MS),
       );
     } else {
       clearInterval(timerInterval);
       clearInterval(intervalState);
+      setTimerStartValue(timer);
       setPause(true);
     }
   };
@@ -87,22 +99,22 @@ export default function Index() {
       <HeaderLayout
         setPause={clickPause}
         score={score}
-        timer={timer}
+        timer={getNormalizeTime(timer)}
+        isNewGame={isNewGame}
         pauseStatus={pause}
         clickStart={clickStart}
         clickRestart={clickRestart}
+        starCount={starCount}
       />
       <FallingStarsZone>
         {starsStorage.map((el, idx) => {
           return (
-            <>
-              <StarContainer
-                coordX={el.x}
-                coordY={el.y}
-                key={idx}
-                value={el.value}
-              />
-            </>
+            <StarContainer
+              coordX={el.x}
+              coordY={el.y}
+              key={idx}
+              value={el.value}
+            />
           );
         })}
       </FallingStarsZone>

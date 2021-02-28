@@ -1,29 +1,34 @@
 import styled from '@emotion/styled';
-import { getNormalizeTime } from '../utils/getNormalizeTime';
+import React from 'react';
 
 type HeaderLayoutType = {
   setPause?: () => void;
   clickStart?: () => void;
   clickRestart?: () => void;
+  starCount?: number;
   score: number;
-  timer: number;
+  timer: string;
   pauseStatus: boolean;
+  isNewGame: boolean;
 };
 
 export const HeaderLayout: React.FC<HeaderLayoutType> = ({
   setPause,
   clickStart,
   clickRestart,
+  starCount,
   score,
   timer,
   pauseStatus,
+  isNewGame,
 }) => {
   const checkDisabled = () => {
-    if (pauseStatus && timer === 0) {
+    if (pauseStatus && isNewGame) {
       return false;
     }
     return !pauseStatus;
   };
+  console.count('rerender header');
   return (
     <>
       <HeaderContainer>
@@ -33,7 +38,7 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = ({
               onClick={() => clickStart()}
               disabled={checkDisabled()}
             >
-              {pauseStatus && timer !== 0 ? 'Continue' : 'Start'}
+              {pauseStatus && !isNewGame ? 'Continue' : 'Start'}
             </ControlPanelButton>
           </PanelElement>
           <PanelElement>
@@ -45,14 +50,19 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = ({
             </ControlPanelButton>
           </PanelElement>
           <PanelElement>
-            <ControlPanelButton onClick={() => clickRestart()}>
+            <ControlPanelButton
+              onClick={() => {
+                clickRestart();
+              }}
+            >
               Restart
             </ControlPanelButton>
           </PanelElement>
         </ControlPanel>
         <ScorePanel>
+          <PanelElement>Star Count: {starCount}</PanelElement>
           <PanelElement>{score} points</PanelElement>
-          <PanelElement>{getNormalizeTime(timer)}</PanelElement>
+          <PanelElement>{timer}</PanelElement>
         </ScorePanel>
       </HeaderContainer>
     </>
@@ -80,7 +90,7 @@ const ScorePanel = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  flex-basis: 20%;
+  flex-basis: 50%;
 `;
 
 const PanelElement = styled.div``;

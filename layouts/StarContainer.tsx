@@ -1,9 +1,22 @@
+import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 
-export const StarContainer = ({ coordX, coordY, value }) => {
+type StarContainerType = {
+  coordX: number;
+  coordY: number;
+  value: number;
+};
+
+export const StarContainer: React.FC<StarContainerType> = ({
+  coordX,
+  coordY,
+  value,
+}) => {
   return (
-    <StyledStarContainer coordinates={calculateCoordinates(coordX, coordY)}>
+    <StyledStarContainer
+      style={{ transform: calculateCoordinates(coordX, coordY) }}
+    >
       <Image
         src="/star.png"
         alt="Picture of the author"
@@ -19,9 +32,8 @@ function calculateCoordinates(X: number, Y: number) {
   return `translate(${X}px, ${Y}px)`;
 }
 
-const StyledStarContainer = styled.div<{ coordinates: string }>`
+const StyledStarContainer = styled.div`
   position: absolute;
-  transform: ${(p) => p.coordinates};
 `;
 
 const StartValue = styled.div`

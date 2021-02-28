@@ -1,4 +1,9 @@
-import { MAX_X_POSITION, SPAWN_AREA, VALUE } from './globalConstants';
+import {
+  MAX_STAR_COUNT,
+  MAX_X_POSITION,
+  SPAWN_AREA,
+  VALUE,
+} from './globalConstants';
 
 export const createStar = (addToStorage: (...args) => void): void => {
   const X: number = Math.random() * MAX_X_POSITION;
@@ -12,7 +17,8 @@ export const createStar = (addToStorage: (...args) => void): void => {
     );
   }
   addToStorage((prev) => {
-    prev.push({ x: X, y: timeOut, value: starValue });
+    if (prev.length < MAX_STAR_COUNT)
+      prev.push({ x: X, y: timeOut, value: starValue });
     return prev;
   });
 };
