@@ -7,6 +7,7 @@ type HeaderLayoutType = {
   clickRestart?: () => void;
   score: number;
   timer: number;
+  pauseStatus: boolean;
 };
 
 export const HeaderLayout: React.FC<HeaderLayoutType> = ({
@@ -15,18 +16,31 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = ({
   clickRestart,
   score,
   timer,
+  pauseStatus,
 }) => {
+  const checkDisabled = () => {
+    if (pauseStatus && timer === 0) {
+      return false;
+    }
+    return !pauseStatus;
+  };
   return (
     <>
       <HeaderContainer>
         <ControlPanel>
           <PanelElement>
-            <ControlPanelButton onClick={() => clickStart()}>
-              Start
+            <ControlPanelButton
+              onClick={() => clickStart()}
+              disabled={checkDisabled()}
+            >
+              {pauseStatus && timer !== 0 ? 'Continue' : 'Start'}
             </ControlPanelButton>
           </PanelElement>
           <PanelElement>
-            <ControlPanelButton onClick={() => setPause()}>
+            <ControlPanelButton
+              onClick={() => setPause()}
+              disabled={pauseStatus}
+            >
               Pause
             </ControlPanelButton>
           </PanelElement>
@@ -72,6 +86,7 @@ const ScorePanel = styled.div`
 const PanelElement = styled.div``;
 
 const ControlPanelButton = styled.button`
+  width: 120px;
   margin: 0 auto;
   font-size: 20px;
   box-shadow: 0px 0px 13px rgba(0, 0, 0, 0.7);
@@ -82,4 +97,9 @@ const ControlPanelButton = styled.button`
   :active {
     transform: scale(0.97);
   }
+  :disabled {
+    cursor: not-allowed;
+    background-color: #24928d;
+  }
+  transition: background-color 1s ease;
 `;
