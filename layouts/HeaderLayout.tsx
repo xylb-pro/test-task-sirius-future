@@ -1,32 +1,24 @@
 import styled from '@emotion/styled';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  onClickPause,
+  onClickRestart,
+  onClickStart,
+} from '../redux/gameState/actions';
+import { RootState } from '../redux/rootReducer';
+import { getNormalizeTime } from '../utils/getNormalizeTime';
 
-type HeaderLayoutType = {
-  setPause?: () => void;
-  clickStart?: () => void;
-  clickRestart?: () => void;
-  starCount?: number;
-  score: number;
-  timer: string;
-  pauseStatus: boolean;
-  isNewGame: boolean;
-};
+type HeaderLayoutType = {};
 
-export const HeaderLayout: React.FC<HeaderLayoutType> = ({
-  setPause,
-  clickStart,
-  clickRestart,
-  starCount,
-  score,
-  timer,
-  pauseStatus,
-  isNewGame,
-}) => {
+export const HeaderLayout: React.FC<HeaderLayoutType> = () => {
+  const dispatch = useDispatch();
+  const store = useSelector((state: RootState) => state.state);
   const checkDisabled = () => {
-    if (pauseStatus && isNewGame) {
+    if (store.isOnPause && store.isFirstGame) {
       return false;
     }
-    return !pauseStatus;
+    return !store.isOnPause;
   };
   return (
     <>
@@ -35,16 +27,16 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = ({
         <ControlPanel>
           <PanelElement>
             <ControlPanelButton
-              onClick={() => clickStart()}
+              onClick={() => dispatch(onClickStart())}
               disabled={checkDisabled()}
             >
-              {pauseStatus && !isNewGame ? 'Continue' : 'Start'}
+              {store.isOnPause && !store.isFirstGame ? 'Continue' : 'Start'}
             </ControlPanelButton>
           </PanelElement>
           <PanelElement>
             <ControlPanelButton
-              onClick={() => setPause()}
-              disabled={pauseStatus}
+              onClick={() => dispatch(onClickPause())}
+              disabled={store.isOnPause}
             >
               Pause
             </ControlPanelButton>
@@ -52,7 +44,7 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = ({
           <PanelElement>
             <ControlPanelButton
               onClick={() => {
-                clickRestart();
+                dispatch(onClickRestart());
               }}
             >
               Restart
@@ -60,9 +52,9 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = ({
           </PanelElement>
         </ControlPanel>
         <ScorePanel>
-          <PanelElement>Star Count: {starCount}</PanelElement>
-          <PanelElement>{score} points</PanelElement>
-          <PanelElement>{timer}</PanelElement>
+          <PanelElement>Star Count: {store.starsCount}</PanelElement>
+          <PanelElement>{store.score} points</PanelElement>
+          <PanelElement>{getNormalizeTime(store.timer)}</PanelElement>
         </ScorePanel>
       </HeaderContainer>
     </>

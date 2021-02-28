@@ -131,7 +131,7 @@ export const dropStarsStorage = (): types.GameActionsType => {
   return { type: types.DROP_STARS_STORAGE, payload: { starsStorage: [] } };
 };
 
-export const restartGame = (): types.AsyncActionType => {
+export const onClickRestart = (): types.AsyncActionType => {
   return (dispatch, getState) => {
     const store = getState().state;
 
@@ -147,7 +147,7 @@ export const restartGame = (): types.AsyncActionType => {
     dispatch(setStarsCount(0));
 
     dispatch({
-      type: types.RESTART_GAME,
+      type: types.ON_CLICK_RESTART,
     });
   };
 };

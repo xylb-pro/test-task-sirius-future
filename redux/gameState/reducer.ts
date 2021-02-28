@@ -8,8 +8,8 @@ import {
   IGameState,
   INCREASE_STARS_COUNT,
   ON_CLICK_PAUSE,
+  ON_CLICK_RESTART,
   ON_CLICK_START,
-  RESTART_GAME,
   SET_IS_FIRST_GAME,
   SET_PAUSE,
   SET_SCORE,
@@ -62,7 +62,7 @@ export const gameReducer = (
       return { ...state, ...action.payload };
     case DROP_STARS_STORAGE:
       return { ...state, ...action.payload };
-    case RESTART_GAME:
+    case ON_CLICK_RESTART:
       return state;
     case ON_CLICK_START:
       return state;

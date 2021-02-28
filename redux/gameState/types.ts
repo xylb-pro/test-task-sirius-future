@@ -15,7 +15,7 @@ export const INCREASE_STARS_COUNT = 'INCREASE_STARS_COUNT';
 export const SET_STARS_COUNT = 'SET_STARS_COUNT';
 export const CREATE_STAR = 'CREATE_STAR';
 export const DROP_STARS_STORAGE = 'DROP_STARS_STORAGE';
-export const RESTART_GAME = 'RESTART_GAME';
+export const ON_CLICK_RESTART = 'ON_CLICK_RESTART';
 export const ON_CLICK_START = 'ON_CLICK_START';
 export const ON_CLICK_PAUSE = 'ON_CLICK_PAUSE';
 
@@ -103,8 +103,8 @@ interface dropStarsStorage {
   payload: { starsStorage: starType[] };
 }
 
-interface restartGame {
-  type: typeof RESTART_GAME;
+interface onClickRestart {
+  type: typeof ON_CLICK_RESTART;
 }
 interface onClickStart {
   type: typeof ON_CLICK_START;
@@ -127,6 +127,6 @@ export type GameActionsType =
   | setStarsCount
   | createStar
   | dropStarsStorage
-  | restartGame
+  | onClickRestart
   | onClickStart
   | onClickPause;
