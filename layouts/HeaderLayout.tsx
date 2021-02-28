@@ -13,16 +13,18 @@ type HeaderLayoutType = {};
 
 export const HeaderLayout: React.FC<HeaderLayoutType> = () => {
   const dispatch = useDispatch();
+
   const store = useSelector((state: RootState) => state.state);
+
   const checkDisabled = () => {
     if (store.isOnPause && store.isFirstGame) {
       return false;
     }
     return !store.isOnPause;
   };
+
   return (
     <>
-      {console.count('rerender')}
       <HeaderContainer>
         <ControlPanel>
           <PanelElement>

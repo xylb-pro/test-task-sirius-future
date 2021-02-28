@@ -1,13 +1,28 @@
 import styled from '@emotion/styled';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/rootReducer';
+import { StarContainer } from './StarContainer';
 
 type FallingStarsZoneType = {};
 
-export const FallingStarsZone: React.FC<FallingStarsZoneType> = ({
-  children,
-}) => {
+export const FallingStarsZone: React.FC<FallingStarsZoneType> = () => {
+  const starsStorage = useSelector(
+    (state: RootState) => state.state.starsStorage,
+  );
   return (
     <>
-      <ZoneContainer>{children}</ZoneContainer>
+      <ZoneContainer>
+        {starsStorage.map((el, idx) => {
+          return (
+            <StarContainer
+              coordX={el.x}
+              coordY={el.y}
+              key={idx}
+              value={el.value}
+            />
+          );
+        })}
+      </ZoneContainer>
     </>
   );
 };
