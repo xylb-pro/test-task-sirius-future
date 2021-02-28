@@ -1,21 +1,23 @@
-import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import { HTMLAttributes } from 'react';
 
-type StarContainerType = {
+interface StarContainerType extends HTMLAttributes<HTMLDivElement> {
   coordX: number;
   coordY: number;
   value: number;
-};
+}
 
 export const StarContainer: React.FC<StarContainerType> = ({
   coordX,
   coordY,
   value,
+  ...rest
 }) => {
   return (
     <StyledStarContainer
       style={{ transform: calculateCoordinates(coordX, coordY) }}
+      {...rest}
     >
       <Image
         src="/star.png"

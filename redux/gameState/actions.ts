@@ -197,3 +197,20 @@ export const onClickPause = (): types.AsyncActionType => {
     dispatch({ type: types.ON_CLICK_PAUSE });
   };
 };
+
+export const changeActiveGameMode = (): types.AsyncActionType => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: types.CHANGE_ACTIVE_GAME_MODE,
+      payload: { activeGameMode: !getState().state.activeGameMode },
+    });
+  };
+};
+
+export const deleteStar = (id: number): types.AsyncActionType => {
+  return (dispatch, getState) => {
+    let starsStorage = getState().state.starsStorage;
+    starsStorage = starsStorage.filter((el, idx) => idx !== id);
+    dispatch({ type: types.DELETE_STAR, payload: { starsStorage } });
+  };
+};

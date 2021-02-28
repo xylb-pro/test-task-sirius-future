@@ -1,8 +1,10 @@
 import {
+  CHANGE_ACTIVE_GAME_MODE,
   CHANGE_SCORE,
   CHANGE_STARS_STORAGE,
   CHANGE_TIMER,
   CREATE_STAR,
+  DELETE_STAR,
   DROP_STARS_STORAGE,
   GameActionsType,
   IGameState,
@@ -68,6 +70,10 @@ export const gameReducer = (
       return state;
     case ON_CLICK_PAUSE:
       return state;
+    case CHANGE_ACTIVE_GAME_MODE:
+      return { ...state, ...action.payload };
+    case DELETE_STAR:
+      return { ...state, ...action.payload };
     default:
       return state;
   }

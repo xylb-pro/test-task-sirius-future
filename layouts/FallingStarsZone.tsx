@@ -1,11 +1,13 @@
 import styled from '@emotion/styled';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteStar } from '../redux/gameState/actions';
 import { RootState } from '../redux/rootReducer';
 import { StarContainer } from './StarContainer';
 
 type FallingStarsZoneType = {};
 
 export const FallingStarsZone: React.FC<FallingStarsZoneType> = () => {
+  const dispatch = useDispatch();
   const starsStorage = useSelector(
     (state: RootState) => state.state.starsStorage,
   );
@@ -19,6 +21,7 @@ export const FallingStarsZone: React.FC<FallingStarsZoneType> = () => {
               coordY={el.y}
               key={idx}
               value={el.value}
+              onMouseDown={() => dispatch(deleteStar(idx))}
             />
           );
         })}

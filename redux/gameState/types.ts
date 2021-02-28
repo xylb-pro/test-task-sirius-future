@@ -18,6 +18,8 @@ export const DROP_STARS_STORAGE = 'DROP_STARS_STORAGE';
 export const ON_CLICK_RESTART = 'ON_CLICK_RESTART';
 export const ON_CLICK_START = 'ON_CLICK_START';
 export const ON_CLICK_PAUSE = 'ON_CLICK_PAUSE';
+export const CHANGE_ACTIVE_GAME_MODE = 'CHANGE_ACTIVE_GAME_MODE';
+export const DELETE_STAR = 'DELETE_STAR';
 
 export type AsyncActionType = ThunkAction<
   void,
@@ -37,6 +39,7 @@ export interface IGameState {
   timerStartValue: number;
   timerInterval: NodeJS.Timeout;
   starsSpawnInterval: NodeJS.Timeout;
+  activeGameMode: boolean;
 }
 
 interface setPause {
@@ -113,6 +116,16 @@ interface onClickPause {
   type: typeof ON_CLICK_PAUSE;
 }
 
+interface changeActiveGameMode {
+  type: typeof CHANGE_ACTIVE_GAME_MODE;
+  payload: { activeGameMode: boolean };
+}
+
+interface deleteStar {
+  type: typeof DELETE_STAR;
+  payload: { starsStorage: starType[] };
+}
+
 export type GameActionsType =
   | setPause
   | setIsFirstGame
@@ -129,4 +142,6 @@ export type GameActionsType =
   | dropStarsStorage
   | onClickRestart
   | onClickStart
-  | onClickPause;
+  | onClickPause
+  | changeActiveGameMode
+  | deleteStar;
