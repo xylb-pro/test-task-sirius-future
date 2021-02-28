@@ -12,14 +12,14 @@ export const BASE_SPAWN_DELAY: number = 3000;
 /**
  * Spawn coordinates spread of the star
  */
-export const SPAWN_AREA = {
+export const SPAWN_AREA: { [key: string]: number } = {
   min: -100,
   max: -400,
 };
 /**
  * Possible star values
  */
-export const VALUE = {
+export const VALUE: { [key: string]: number } = {
   min: -5,
   max: 5,
   without: 0,

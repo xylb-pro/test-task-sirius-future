@@ -1,30 +1,28 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FallingStarsZone } from '../layouts/FallingStarsZone';
 import { HeaderLayout } from '../layouts/HeaderLayout';
 import { StarContainer } from '../layouts/StarContainer';
 import { createStar } from '../utils/createStar';
 import {
-  MAX_X_POSITION,
+  BASE_SPAWN_DELAY,
+  MAX_STAR_COUNT,
   MAX_Y_POSITION,
   STAR_STEP,
-  TIME_OUT,
-  VALUE,
 } from '../utils/globalConstants';
 
 export default function Index() {
   const [starsStorage, setStarStorage] = useState<
     { x: number; y: number; value: number }[]
   >([]);
-  const [starsCounter, setStarsCounter] = useState<number>(starsStorage.length);
   const [pause, setPause] = useState<boolean>(true);
-  const [intervalState, setIntervalState] = useState<any>();
-  const [timerInterval, setTimerInterval] = useState<any>();
+  const [intervalState, setIntervalState] = useState<NodeJS.Timeout>();
+  const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout>();
   const [score, setScore] = useState<number>(0);
   const [timer, setTimer] = useState<number>(0);
 
-  const clickRestart = () => {
+  const clickRestart = (): void => {
     setPause(true);
     setScore(0);
     setTimer(0);
@@ -33,24 +31,24 @@ export default function Index() {
     clearInterval(timerInterval);
   };
 
-  const clickStart = () => {
-    let startTime = Date.now();
+  const clickStart: () => void = () => {
+    let startTime: number = Date.now();
     if (starsStorage.length === 0) {
       setTimerInterval(
         setInterval(() => {
           setTimer(Date.now() - startTime);
         }, 1000),
       );
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < MAX_STAR_COUNT; i++) {
         setTimeout(() => {
           createStar(setStarStorage);
-        }, i * 3000);
+        }, i * BASE_SPAWN_DELAY);
       }
     }
     clickPause();
   };
 
-  const clickPause = () => {
+  const clickPause: () => void = () => {
     if (pause) {
       setPause(false);
       setIntervalState(
@@ -64,10 +62,7 @@ export default function Index() {
                 }
                 return el.y < MAX_Y_POSITION;
               })
-              .map((el, idx, arr) => {
-                if (arr.length !== 3) {
-                  setStarsCounter(arr.length);
-                }
+              .map((el) => {
                 return { ...el, y: el.y + STAR_STEP };
               });
           });
@@ -93,6 +88,7 @@ export default function Index() {
         setPause={clickPause}
         score={score}
         timer={timer}
+        pauseStatus={pause}
         clickStart={clickStart}
         clickRestart={clickRestart}
       />
