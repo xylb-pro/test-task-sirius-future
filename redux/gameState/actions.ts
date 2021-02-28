@@ -1,3 +1,4 @@
+import { STAR_STEP_MS } from './../../utils/globalConstants';
 import {
   MAX_STAR_COUNT,
   MAX_X_POSITION,
@@ -128,4 +129,71 @@ export const createStar = (): types.AsyncActionType => {
 
 export const dropStarsStorage = (): types.GameActionsType => {
   return { type: types.DROP_STARS_STORAGE, payload: { starsStorage: [] } };
+};
+
+export const restartGame = (): types.AsyncActionType => {
+  return (dispatch, getState) => {
+    const store = getState().state;
+
+    clearInterval(store.starsSpawnInterval);
+    clearInterval(store.timerInterval);
+
+    dispatch(setPause(true));
+    dispatch(setScore(0));
+    dispatch(changeTimer(0));
+    dispatch(dropStarsStorage());
+    dispatch(setTimerStartValue(0));
+    dispatch(setIsFirstGame(true));
+    dispatch(setStarsCount(0));
+
+    dispatch({
+      type: types.RESTART_GAME,
+    });
+  };
+};
+
+export const onClickStart = (): types.AsyncActionType => {
+  return (dispatch, getState) => {
+    let startTime: number = Date.now();
+
+    let store = getState().state;
+
+    const temp = setInterval(() => {
+      dispatch(changeTimer(store.timerStartValue + Date.now() - startTime));
+    }, 1000);
+
+    dispatch(updateTimerInterval(temp));
+
+    if (store.starsStorage.length === 0) {
+      dispatch(setIsFirstGame(false));
+      for (let i = 0; i < MAX_STAR_COUNT; i++) {
+        dispatch(createStar());
+      }
+    }
+
+    dispatch(onClickPause());
+
+    dispatch({ type: types.ON_CLICK_START });
+  };
+};
+
+export const onClickPause = (): types.AsyncActionType => {
+  return (dispatch, getState) => {
+    const store = getState().state;
+
+    if (store.isOnPause) {
+      dispatch(setPause(false));
+      const temp = setInterval(() => {
+        dispatch(changeStarsStorage());
+      }, STAR_STEP_MS);
+      dispatch(updateStarsSpawnInterval(temp));
+    } else {
+      clearInterval(store.timerInterval);
+      clearInterval(store.starsSpawnInterval);
+      dispatch(setTimerStartValue(store.timer));
+      dispatch(setPause(true));
+    }
+
+    dispatch({ type: types.ON_CLICK_PAUSE });
+  };
 };

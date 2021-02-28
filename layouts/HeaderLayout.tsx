@@ -30,6 +30,7 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = ({
   };
   return (
     <>
+      {console.count('rerender')}
       <HeaderContainer>
         <ControlPanel>
           <PanelElement>

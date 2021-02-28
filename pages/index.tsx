@@ -12,6 +12,9 @@ import {
   createStar,
   dropStarsStorage,
   increaseStarsCount,
+  onClickPause,
+  onClickStart,
+  restartGame,
   setIsFirstGame,
   setPause,
   setScore,
@@ -33,47 +36,15 @@ export default function Index() {
   const store = useSelector((state: RootState) => state.state);
 
   const clickRestart = (): void => {
-    dispatch(setPause(true));
-    dispatch(setScore(0));
-    dispatch(changeTimer(0));
-    dispatch(dropStarsStorage());
-    dispatch(setTimerStartValue(0));
-    clearInterval(store.starsSpawnInterval);
-    clearInterval(store.timerInterval);
-    dispatch(setIsFirstGame(true));
-    dispatch(setStarsCount(0));
+    dispatch(restartGame());
   };
 
   const clickStart: () => void = () => {
-    let startTime: number = Date.now();
-    const temp = setInterval(() => {
-      dispatch(changeTimer(store.timerStartValue + Date.now() - startTime));
-    }, 1000);
-    dispatch(updateTimerInterval(temp));
-    if (store.starsStorage.length === 0) {
-      dispatch(setIsFirstGame(false));
-      for (let i = 0; i < CONST.MAX_STAR_COUNT; i++) {
-        // setTimeout(() => {
-        dispatch(createStar());
-        // }, i * CONST.BASE_SPAWN_DELAY);
-      }
-    }
-    clickPause();
+    dispatch(onClickStart());
   };
 
   const clickPause: () => void = () => {
-    if (store.isOnPause) {
-      dispatch(setPause(false));
-      const temp = setInterval(() => {
-        dispatch(changeStarsStorage());
-      }, CONST.STAR_STEP_MS);
-      dispatch(updateStarsSpawnInterval(temp));
-    } else {
-      clearInterval(store.timerInterval);
-      clearInterval(store.starsSpawnInterval);
-      dispatch(setTimerStartValue(store.timer));
-      dispatch(setPause(true));
-    }
+    dispatch(onClickPause());
   };
 
   return (

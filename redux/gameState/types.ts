@@ -15,6 +15,9 @@ export const INCREASE_STARS_COUNT = 'INCREASE_STARS_COUNT';
 export const SET_STARS_COUNT = 'SET_STARS_COUNT';
 export const CREATE_STAR = 'CREATE_STAR';
 export const DROP_STARS_STORAGE = 'DROP_STARS_STORAGE';
+export const RESTART_GAME = 'RESTART_GAME';
+export const ON_CLICK_START = 'ON_CLICK_START';
+export const ON_CLICK_PAUSE = 'ON_CLICK_PAUSE';
 
 export type AsyncActionType = ThunkAction<
   void,
@@ -100,6 +103,16 @@ interface dropStarsStorage {
   payload: { starsStorage: starType[] };
 }
 
+interface restartGame {
+  type: typeof RESTART_GAME;
+}
+interface onClickStart {
+  type: typeof ON_CLICK_START;
+}
+interface onClickPause {
+  type: typeof ON_CLICK_PAUSE;
+}
+
 export type GameActionsType =
   | setPause
   | setIsFirstGame
@@ -113,4 +126,7 @@ export type GameActionsType =
   | increaseStarsCount
   | setStarsCount
   | createStar
-  | dropStarsStorage;
+  | dropStarsStorage
+  | restartGame
+  | onClickStart
+  | onClickPause;
