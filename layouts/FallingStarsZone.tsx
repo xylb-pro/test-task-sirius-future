@@ -35,7 +35,7 @@ export const FallingStarsZone: React.FC<FallingStarsZoneType> = () => {
 const ZoneContainer = styled.div`
   position: relative;
   margin: 0 auto;
-  border: 2px solid black;
   width: 800px;
   height: calc(100vh - 100px);
+  user-select: none;
 `;
