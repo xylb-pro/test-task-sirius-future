@@ -21,10 +21,10 @@ export const setIsFirstGame = (payload: boolean): types.GameActionsType => {
 
 export const changeStarsStorage = (): types.AsyncActionType => {
   return (dispatch, getState) => {
-    let starsStorage = getState().state.starsStorage;
-    starsStorage = starsStorage
+    let store = getState().state;
+    let starsStorage = store.starsStorage
       .filter((el) => {
-        if (el.y >= MAX_Y_POSITION) {
+        if (el.y >= MAX_Y_POSITION && !store.activeGameMode) {
           dispatch(changeScore(el.value));
           dispatch(increaseStarsCount());
         }
@@ -200,6 +200,7 @@ export const onClickPause = (): types.AsyncActionType => {
 
 export const changeActiveGameMode = (): types.AsyncActionType => {
   return (dispatch, getState) => {
+    dispatch(onClickRestart());
     dispatch({
       type: types.CHANGE_ACTIVE_GAME_MODE,
       payload: { activeGameMode: !getState().state.activeGameMode },
@@ -210,7 +211,11 @@ export const changeActiveGameMode = (): types.AsyncActionType => {
 export const deleteStar = (id: number): types.AsyncActionType => {
   return (dispatch, getState) => {
     let starsStorage = getState().state.starsStorage;
-    starsStorage = starsStorage.filter((el, idx) => idx !== id);
+    dispatch(changeScore(starsStorage[id].value));
+    dispatch(increaseStarsCount());
+    starsStorage = starsStorage.filter((el, idx) => {
+      return idx !== id;
+    });
     dispatch({ type: types.DELETE_STAR, payload: { starsStorage } });
   };
 };

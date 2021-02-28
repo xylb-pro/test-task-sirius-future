@@ -8,20 +8,22 @@ type FallingStarsZoneType = {};
 
 export const FallingStarsZone: React.FC<FallingStarsZoneType> = () => {
   const dispatch = useDispatch();
-  const starsStorage = useSelector(
-    (state: RootState) => state.state.starsStorage,
-  );
+  const store = useSelector((state: RootState) => state.state);
   return (
     <>
       <ZoneContainer>
-        {starsStorage.map((el, idx) => {
+        {store.starsStorage.map((el, idx) => {
           return (
             <StarContainer
               coordX={el.x}
               coordY={el.y}
               key={idx}
               value={el.value}
-              onMouseDown={() => dispatch(deleteStar(idx))}
+              onMouseDown={() => {
+                if (store.activeGameMode && !store.isOnPause) {
+                  dispatch(deleteStar(idx));
+                }
+              }}
             />
           );
         })}
