@@ -28,7 +28,7 @@ export type AsyncActionType = ThunkAction<
   Action<String>
 >;
 
-export type starType = { x: number; y: number; value: number };
+export type starType = { x: number; y: number; value: number; step: number };
 export interface IGameState {
   starsStorage: starType[];
   starsCount: number;

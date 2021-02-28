@@ -1,12 +1,4 @@
-import { STAR_STEP_MS } from './../../utils/globalConstants';
-import {
-  MAX_STAR_COUNT,
-  MAX_X_POSITION,
-  MAX_Y_POSITION,
-  SPAWN_AREA,
-  STAR_STEP,
-  VALUE,
-} from '../../utils/globalConstants';
+import { STAR, UPDATE_DELAY } from '../../utils/globalConstants';
 import * as types from './types';
 
 //ok
@@ -24,14 +16,14 @@ export const changeStarsStorage = (): types.AsyncActionType => {
     let store = getState().state;
     let starsStorage = store.starsStorage
       .filter((el) => {
-        if (el.y >= MAX_Y_POSITION && !store.activeGameMode) {
+        if (el.y >= STAR.yMax && !store.activeGameMode) {
           dispatch(changeScore(el.value));
           dispatch(increaseStarsCount());
         }
-        return el.y < MAX_Y_POSITION;
+        return el.y < STAR.yMax;
       })
       .map((el) => {
-        return { ...el, y: el.y + STAR_STEP };
+        return { ...el, y: el.y + el.step };
       });
 
     dispatch({
@@ -39,7 +31,7 @@ export const changeStarsStorage = (): types.AsyncActionType => {
       payload: { starsStorage },
     });
     ``;
-    if (starsStorage.length < MAX_STAR_COUNT) {
+    if (starsStorage.length < STAR.maxCount) {
       dispatch(createStar());
     }
   };
@@ -107,19 +99,20 @@ export const setStarsCount = (payload: number): types.GameActionsType => {
 export const createStar = (): types.AsyncActionType => {
   return (dispatch, getState) => {
     let starsStorage = getState().state.starsStorage;
-    const x: number = Math.floor(Math.random() * MAX_X_POSITION);
+    const x: number = Math.floor(Math.random() * STAR.xMax);
     const y: number = Math.floor(
-      Math.random() * (SPAWN_AREA.max - SPAWN_AREA.min + 1) + SPAWN_AREA.min,
+      Math.random() * (STAR.ySpawnMax - STAR.ySpawnMin + 1) + STAR.ySpawnMin,
     );
-    let value: number = VALUE.without;
-    while (value === VALUE.without) {
+    const step: number = Math.floor(
+      Math.random() * (STAR.stepMax - STAR.stepMin + 1) + STAR.stepMin,
+    );
+    let value: number = STAR.valueWithout;
+    while (value === STAR.valueWithout) {
       value = Math.floor(
-        Math.random() * (VALUE.max - VALUE.min + 1) + VALUE.min,
+        Math.random() * (STAR.valueMax - STAR.valueMin + 1) + STAR.valueMin,
       );
     }
-    // if (starsStorage.length < MAX_STAR_COUNT) {
-    starsStorage.push({ x, y, value });
-    // }
+    starsStorage.push({ x, y, value, step });
     dispatch({
       type: types.CREATE_STAR,
       payload: { starsStorage },
@@ -166,7 +159,7 @@ export const onClickStart = (): types.AsyncActionType => {
 
     if (store.starsStorage.length === 0) {
       dispatch(setIsFirstGame(false));
-      for (let i = 0; i < MAX_STAR_COUNT; i++) {
+      for (let i = 0; i < STAR.maxCount; i++) {
         dispatch(createStar());
       }
     }
@@ -185,7 +178,7 @@ export const onClickPause = (): types.AsyncActionType => {
       dispatch(setPause(false));
       const temp = setInterval(() => {
         dispatch(changeStarsStorage());
-      }, STAR_STEP_MS);
+      }, UPDATE_DELAY);
       dispatch(updateStarsSpawnInterval(temp));
     } else {
       clearInterval(store.timerInterval);
