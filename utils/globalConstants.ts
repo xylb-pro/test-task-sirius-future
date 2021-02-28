@@ -12,7 +12,7 @@ export const STAR_STEP_MS: number = 20;
 /**
  * Вelay between spawning stars at start
  */
-export const BASE_SPAWN_DELAY: number = 3000;
+export const BASE_SPAWN_DELAY: number = 1500;
 /**
  * Spawn coordinates spread of the star
  */

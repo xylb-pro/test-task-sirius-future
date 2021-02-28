@@ -1,17 +1,31 @@
+import { Action } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { RootState } from '../rootReducer';
+
 export const SET_PAUSE = 'SET_PAUSE';
 export const SET_IS_FIRST_GAME = 'SET_IS_FIRST_GAME';
 export const CHANGE_STARS_STORAGE = 'CHANGE_STARS_STORAGE';
 export const CHANGE_SCORE = 'CHANGE_SCORE';
+export const SET_SCORE = 'SET_SCORE';
 export const CHANGE_TIMER = 'CHANGE_TIMER';
-export const CHANGE_TIMER_START_VALUE = 'CHANGE_TIMER_START_VALUE';
+export const SET_TIMER_START_VALUE = 'SET_TIMER_START_VALUE';
 export const UPDATE_TIMER_INTERVAL = 'UPDATE_TIMER_INTERVAL';
 export const UPDATE_STARS_SPAWN_INTERVAL = 'UPDATE_STARS_SPAWN_INTERVAL';
 export const INCREASE_STARS_COUNT = 'INCREASE_STARS_COUNT';
+export const SET_STARS_COUNT = 'SET_STARS_COUNT';
+export const CREATE_STAR = 'CREATE_STAR';
+export const DROP_STARS_STORAGE = 'DROP_STARS_STORAGE';
 
-export type starsStorageType = { x: number; y: number; value: number }[];
+export type AsyncActionType = ThunkAction<
+  void,
+  RootState,
+  unknown,
+  Action<String>
+>;
 
+export type starType = { x: number; y: number; value: number };
 export interface IGameState {
-  starsStorage: starsStorageType;
+  starsStorage: starType[];
   starsCount: number;
   isOnPause: boolean;
   isFirstGame: boolean;
@@ -34,10 +48,15 @@ interface setIsFirstGame {
 
 interface changeStarsStorage {
   type: typeof CHANGE_STARS_STORAGE;
-  payload: { starsStorage: starsStorageType };
+  payload: { starsStorage: starType[] };
 }
 interface changeScore {
   type: typeof CHANGE_SCORE;
+  payload: { score: number };
+}
+
+interface setScore {
+  type: typeof SET_SCORE;
   payload: { score: number };
 }
 
@@ -46,8 +65,8 @@ interface changeTimer {
   payload: { timer: number };
 }
 
-interface changeTimerStartValue {
-  type: typeof CHANGE_TIMER_START_VALUE;
+interface setTimerStartValue {
+  type: typeof SET_TIMER_START_VALUE;
   payload: { timerStartValue: number };
 }
 
@@ -66,13 +85,32 @@ interface increaseStarsCount {
   payload: { starsCount: number };
 }
 
+interface setStarsCount {
+  type: typeof SET_STARS_COUNT;
+  payload: { starsCount: number };
+}
+
+interface createStar {
+  type: typeof CREATE_STAR;
+  payload: { starsStorage: starType[] };
+}
+
+interface dropStarsStorage {
+  type: typeof DROP_STARS_STORAGE;
+  payload: { starsStorage: starType[] };
+}
+
 export type GameActionsType =
   | setPause
   | setIsFirstGame
   | changeStarsStorage
   | changeScore
+  | setScore
   | changeTimer
-  | changeTimerStartValue
+  | setTimerStartValue
   | updateTimerInterval
   | updateStarsSpawnInterval
-  | increaseStarsCount;
+  | increaseStarsCount
+  | setStarsCount
+  | createStar
+  | dropStarsStorage;

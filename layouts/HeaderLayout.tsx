@@ -28,7 +28,6 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = ({
     }
     return !pauseStatus;
   };
-  console.count('rerender header');
   return (
     <>
       <HeaderContainer>

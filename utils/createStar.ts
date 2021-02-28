@@ -5,8 +5,8 @@ import {
   VALUE,
 } from './globalConstants';
 
-export const createStar = (addToStorage: (...args) => void): void => {
-  const X: number = Math.random() * MAX_X_POSITION;
+const createStar = (addToStorage: (...args) => void): void => {
+  const X: number = Math.floor(Math.random() * MAX_X_POSITION);
   const timeOut: number = Math.floor(
     Math.random() * (SPAWN_AREA.max - SPAWN_AREA.min + 1) + SPAWN_AREA.min,
   );
@@ -22,3 +22,5 @@ export const createStar = (addToStorage: (...args) => void): void => {
     return prev;
   });
 };
+
+export {};
