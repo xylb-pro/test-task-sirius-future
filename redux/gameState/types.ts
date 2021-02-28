@@ -20,6 +20,7 @@ export const ON_CLICK_START = 'ON_CLICK_START';
 export const ON_CLICK_PAUSE = 'ON_CLICK_PAUSE';
 export const CHANGE_ACTIVE_GAME_MODE = 'CHANGE_ACTIVE_GAME_MODE';
 export const DELETE_STAR = 'DELETE_STAR';
+export const SET_MAX_STAR_COUNT = 'SET_MAX_STAR_COUNT';
 
 export type AsyncActionType = ThunkAction<
   void,
@@ -40,6 +41,7 @@ export interface IGameState {
   timerInterval: NodeJS.Timeout;
   starsSpawnInterval: NodeJS.Timeout;
   activeGameMode: boolean;
+  maxStarCount: number;
 }
 
 interface setPause {
@@ -126,6 +128,11 @@ interface deleteStar {
   payload: { starsStorage: starType[] };
 }
 
+interface setMaxStarCount {
+  type: typeof SET_MAX_STAR_COUNT;
+  payload: { maxStarCount: number };
+}
+
 export type GameActionsType =
   | setPause
   | setIsFirstGame
@@ -144,4 +151,5 @@ export type GameActionsType =
   | onClickStart
   | onClickPause
   | changeActiveGameMode
-  | deleteStar;
+  | deleteStar
+  | setMaxStarCount;

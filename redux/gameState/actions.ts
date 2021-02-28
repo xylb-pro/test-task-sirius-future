@@ -31,7 +31,7 @@ export const changeStarsStorage = (): types.AsyncActionType => {
       payload: { starsStorage },
     });
     ``;
-    if (starsStorage.length < STAR.maxCount) {
+    if (starsStorage.length < store.maxStarCount) {
       dispatch(createStar());
     }
   };
@@ -159,7 +159,7 @@ export const onClickStart = (): types.AsyncActionType => {
 
     if (store.starsStorage.length === 0) {
       dispatch(setIsFirstGame(false));
-      for (let i = 0; i < STAR.maxCount; i++) {
+      for (let i = 0; i < store.maxStarCount; i++) {
         dispatch(createStar());
       }
     }
@@ -211,4 +211,10 @@ export const deleteStar = (id: number): types.AsyncActionType => {
     });
     dispatch({ type: types.DELETE_STAR, payload: { starsStorage } });
   };
+};
+
+export const setMaxStarCount = (
+  maxStarCount: number,
+): types.GameActionsType => {
+  return { type: types.SET_MAX_STAR_COUNT, payload: { maxStarCount } };
 };

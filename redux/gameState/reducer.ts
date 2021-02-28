@@ -13,6 +13,7 @@ import {
   ON_CLICK_RESTART,
   ON_CLICK_START,
   SET_IS_FIRST_GAME,
+  SET_MAX_STAR_COUNT,
   SET_PAUSE,
   SET_SCORE,
   SET_STARS_COUNT,
@@ -32,6 +33,7 @@ const initialState: IGameState = {
   timerInterval: null,
   starsSpawnInterval: null,
   activeGameMode: false,
+  maxStarCount: 3,
 };
 
 export const gameReducer = (
@@ -74,6 +76,8 @@ export const gameReducer = (
     case CHANGE_ACTIVE_GAME_MODE:
       return { ...state, ...action.payload };
     case DELETE_STAR:
+      return { ...state, ...action.payload };
+    case SET_MAX_STAR_COUNT:
       return { ...state, ...action.payload };
     default:
       return state;

@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   changeActiveGameMode,
   onClickPause,
   onClickRestart,
   onClickStart,
+  setMaxStarCount,
 } from '../redux/gameState/actions';
 import { RootState } from '../redux/rootReducer';
 import { colors } from '../style/colors';
@@ -16,8 +17,8 @@ type HeaderLayoutType = {};
 
 export const HeaderLayout: React.FC<HeaderLayoutType> = () => {
   const dispatch = useDispatch();
-
   const store = useSelector((state: RootState) => state.state);
+  let inputField = useRef(null);
 
   const checkDisabled = () => {
     if (store.isOnPause && store.isFirstGame) {
@@ -57,6 +58,17 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = () => {
           </PanelElement>
         </ControlPanel>
         <GameMode>
+          <StarCountTitle>Max Stars</StarCountTitle>
+          <StarCountInput
+            ref={inputField}
+            type="number"
+            min="3"
+            max="20"
+            value={store.maxStarCount}
+            onChange={(e) => dispatch(setMaxStarCount(e.target.valueAsNumber))}
+            onMouseOver={() => inputField.current.focus()}
+            onMouseOut={() => inputField.current.blur()}
+          />
           <GameModeText>Active Game Mode</GameModeText>
           <SwitchButton
             onClick={() => {
@@ -104,7 +116,30 @@ const GameMode = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-basis: 15%;
+  flex-basis: 30%;
+`;
+
+const StarCountInput = styled.input`
+  border: none;
+  box-shadow: 0px 0px 13px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  padding: 5px 5px;
+  max-width: 32px;
+  font-size: 18px;
+  color: ${colors.$white};
+  background-color: ${colors.$purpleWeak};
+  cursor: pointer;
+  ::-webkit-inner-spin-button,
+  ::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+`;
+
+const StarCountTitle = styled.p`
+  color: ${colors.$white};
 `;
 
 const GameModeText = styled.p`
