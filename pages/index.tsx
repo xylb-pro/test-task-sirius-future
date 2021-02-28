@@ -1,24 +1,21 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { FallingStarsZone } from '../layouts/FallingStarsZone';
 import { HeaderLayout } from '../layouts/HeaderLayout';
 import { StarContainer } from '../layouts/StarContainer';
+import { setPause } from '../redux/gameState/actions';
+import { RootState } from '../redux/rootReducer';
 import { createStar } from '../utils/createStar';
 import { getNormalizeTime } from '../utils/getNormalizeTime';
-import {
-  BASE_SPAWN_DELAY,
-  MAX_STAR_COUNT,
-  MAX_Y_POSITION,
-  STAR_STEP,
-  STAR_STEP_MS,
-} from '../utils/globalConstants';
+import * as CONST from '../utils/globalConstants';
 
 export default function Index() {
   const [starsStorage, setStarStorage] = useState<
     { x: number; y: number; value: number }[]
   >([]);
-  const [pause, setPause] = useState<boolean>(true);
+  // const [pause, setPause] = useState<boolean>(true);
   const [intervalState, setIntervalState] = useState<NodeJS.Timeout>();
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout>();
   const [score, setScore] = useState<number>(0);
@@ -27,8 +24,12 @@ export default function Index() {
   const [starCount, setStarCount] = useState<number>(0);
   const [isNewGame, setIsNewGame] = useState<boolean>(true);
 
+  const dispatch = useDispatch();
+
+  const pause = useSelector((state: RootState) => state.state.isOnPause);
+
   const clickRestart = (): void => {
-    setPause(true);
+    dispatch(setPause(true));
     setScore(0);
     setTimer(0);
     setStarStorage([]);
@@ -48,10 +49,10 @@ export default function Index() {
     );
     if (starsStorage.length === 0) {
       setIsNewGame(false);
-      for (let i = 0; i < MAX_STAR_COUNT; i++) {
+      for (let i = 0; i < CONST.MAX_STAR_COUNT; i++) {
         setTimeout(() => {
           createStar(setStarStorage);
-        }, i * BASE_SPAWN_DELAY);
+        }, i * CONST.BASE_SPAWN_DELAY);
       }
     }
     clickPause();
@@ -59,31 +60,31 @@ export default function Index() {
 
   const clickPause: () => void = () => {
     if (pause) {
-      setPause(false);
+      dispatch(setPause(false));
       setIntervalState(
         setInterval(() => {
           setStarStorage((prev) => {
             return prev
               .filter((el, idx, arr) => {
-                if (el.y >= MAX_Y_POSITION) {
+                if (el.y >= CONST.MAX_Y_POSITION) {
                   setScore((p) => p + el.value);
                   createStar(setStarStorage);
                   setStarCount((p) => (p += 1));
                   console.log(arr.length);
                 }
-                return el.y < MAX_Y_POSITION;
+                return el.y < CONST.MAX_Y_POSITION;
               })
               .map((el) => {
-                return { ...el, y: el.y + STAR_STEP };
+                return { ...el, y: el.y + CONST.STAR_STEP };
               });
           });
-        }, STAR_STEP_MS),
+        }, CONST.STAR_STEP_MS),
       );
     } else {
       clearInterval(timerInterval);
       clearInterval(intervalState);
       setTimerStartValue(timer);
-      setPause(true);
+      dispatch(setPause(true));
     }
   };
 
