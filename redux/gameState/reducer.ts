@@ -21,7 +21,7 @@ import {
   UPDATE_TIMER_INTERVAL,
 } from './types';
 
-const initialState = {
+const initialState: IGameState = {
   starsStorage: [],
   starsCount: 0,
   isOnPause: true,
@@ -31,6 +31,7 @@ const initialState = {
   timerStartValue: 0,
   timerInterval: null,
   starsSpawnInterval: null,
+  activeGameMode: false,
 };
 
 export const gameReducer = (
