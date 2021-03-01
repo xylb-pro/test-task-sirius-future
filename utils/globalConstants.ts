@@ -17,7 +17,7 @@ export const STAR: STAR = {
   xMax: 690,
   yMax: 850,
   stepMin: 1,
-  stepMax: 15,
+  stepMax: 10,
   baseStep: 5,
   valueMin: -5,
   valueMax: 5,

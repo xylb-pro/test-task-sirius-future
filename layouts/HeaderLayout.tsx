@@ -13,9 +13,7 @@ import { colors } from '../style/colors';
 import { getNormalizeTime } from '../utils/getNormalizeTime';
 import { SwitchButton } from './SwitchButton';
 
-type HeaderLayoutType = {};
-
-export const HeaderLayout: React.FC<HeaderLayoutType> = () => {
+export const HeaderLayout: React.FC = () => {
   const dispatch = useDispatch();
   const store = useSelector((state: RootState) => state.state);
   let inputField = useRef(null);
@@ -48,11 +46,7 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = () => {
             </ControlPanelButton>
           </PanelElement>
           <PanelElement>
-            <ControlPanelButton
-              onClick={() => {
-                dispatch(onClickRestart());
-              }}
-            >
+            <ControlPanelButton onClick={() => dispatch(onClickRestart())}>
               Restart
             </ControlPanelButton>
           </PanelElement>
@@ -77,7 +71,6 @@ export const HeaderLayout: React.FC<HeaderLayoutType> = () => {
             selectorPosition={store.activeGameMode}
           />
         </GameMode>
-
         <ScorePanel>
           <PanelElement>Star Count: {store.starsCount}</PanelElement>
           <PanelElement>{store.score} points</PanelElement>

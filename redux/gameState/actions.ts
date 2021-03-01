@@ -1,12 +1,10 @@
 import { STAR, UPDATE_DELAY } from '../../utils/globalConstants';
 import * as types from './types';
 
-//ok
 export const setPause = (payload: boolean): types.GameActionsType => {
   return { type: types.SET_PAUSE, payload: { isOnPause: payload } };
 };
 
-//ok
 export const setIsFirstGame = (payload: boolean): types.GameActionsType => {
   return { type: types.SET_IS_FIRST_GAME, payload: { isFirstGame: payload } };
 };
@@ -19,6 +17,9 @@ export const changeStarsStorage = (): types.AsyncActionType => {
         if (el.y >= STAR.yMax && !store.activeGameMode) {
           dispatch(changeScore(el.value));
           dispatch(increaseStarsCount());
+        }
+        if (el.y >= STAR.yMax && store.activeGameMode && el.value > 0) {
+          dispatch(changeScore(el.value * -1));
         }
         return el.y < STAR.yMax;
       })
@@ -82,7 +83,6 @@ export const updateStarsSpawnInterval = (
   };
 };
 
-//ok
 export const increaseStarsCount = (): types.AsyncActionType => {
   return (dispatch, getState) => {
     dispatch({
@@ -91,7 +91,7 @@ export const increaseStarsCount = (): types.AsyncActionType => {
     });
   };
 };
-//ok
+
 export const setStarsCount = (payload: number): types.GameActionsType => {
   return { type: types.SET_STARS_COUNT, payload: { starsCount: payload } };
 };
