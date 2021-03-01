@@ -11,7 +11,7 @@ export const FallingStarsZone: React.FC<FallingStarsZoneType> = () => {
   const store = useSelector((state: RootState) => state.state);
   return (
     <>
-      <ZoneContainer>
+      <ZoneContainer crosshair={store.activeGameMode}>
         {store.starsStorage.map((el, idx) => {
           return (
             <StarContainer
@@ -32,10 +32,11 @@ export const FallingStarsZone: React.FC<FallingStarsZoneType> = () => {
   );
 };
 
-const ZoneContainer = styled.div`
+const ZoneContainer = styled.div<{ crosshair?: boolean }>`
   position: relative;
   margin: 0 auto;
   width: 800px;
   height: calc(100vh - 100px);
   user-select: none;
+  cursor: ${(p) => (p.crosshair ? 'crosshair' : 'default')};
 `;
