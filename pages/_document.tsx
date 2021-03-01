@@ -5,9 +5,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head>
-          <title>FallingStars | App</title>
-        </Head>
+        <Head />
         <Global
           styles={css`
             *,
